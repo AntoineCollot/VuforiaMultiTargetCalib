@@ -36,17 +36,17 @@ public class PointOffset : MonoBehaviour {
 
     public void MoveRight(float amount)
     {
-        Move(Vector3.right * amount);
+        Move(buttonHolder.transform.right * amount);
     }
 
     public void MoveUp(float amount)
     {
-        Move(Vector3.up * amount);
+        Move(buttonHolder.transform.up * amount);
     }
 
     public void MoveForward(float amount)
     {
-        Move(Vector3.forward * amount);
+        Move(buttonHolder.transform.forward * amount);
     }
 
     public void Move(Vector3 displacement)

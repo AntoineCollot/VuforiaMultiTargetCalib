@@ -10,8 +10,14 @@ public class PlacementManager : MonoBehaviour {
     [SerializeField]
     PointOffset[] points;
 
+    [SerializeField]
+    float minPointDistance = 0.2f;
+
     int currentPointId = -1;
 
+    bool pointsAreVisible;
+
+    [HideInInspector]
     public bool hologramIsPlaced = false;
 
     public static PlacementManager Instance;
@@ -21,16 +27,34 @@ public class PlacementManager : MonoBehaviour {
         Instance = this;
 	}
 	
-    public void hidePoints()
+    public void ShowPoints(bool value)
     {
         foreach (PointOffset p in points)
         {
-            p.gameObject.SetActive(false);
+            p.gameObject.SetActive(value);
         }
+
+        pointsAreVisible = value;
+    }
+
+    public void ShowPoints()
+    {
+        ShowPoints(!pointsAreVisible);
     }
 
     public void SetPoint(Vector3 position, Quaternion rotation)
     {
+        for (int i = 0; i <= currentPointId; i++)
+        {
+            if (Vector3.Distance(points[i].transform.position, position) < minPointDistance)
+            {
+                print("Points too close");
+                return;
+            }
+
+
+        }
+
         currentPointId++;
 
         if(currentPointId>points.Length)
@@ -43,8 +67,18 @@ public class PlacementManager : MonoBehaviour {
 
         if(currentPointId == 2)
         {
-            UpdateTargetPosition();
+            SetTargetPosition();
         }
+    }
+
+    public void SetTargetPosition()
+    {
+        hologramIsPlaced = true;
+        ShowPoints(false);
+        GestureManager.Instance.StartCapturingAirTap();
+        target.gameObject.SetActive(true);
+
+        UpdateTargetPosition();
     }
 
     public void UpdateTargetPosition()
@@ -53,9 +87,5 @@ public class PlacementManager : MonoBehaviour {
         Vector3 direction = directionPoint - points[0].Position;
 
         target.PlaceAt(points[0].Position, points[0].Position + direction);
-        target.gameObject.SetActive(true);
-
-        hologramIsPlaced = true;
-        hidePoints();
     }
 }

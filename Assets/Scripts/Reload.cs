@@ -20,7 +20,7 @@ public class Reload : MonoBehaviour {
 
 	public void ReloadApp()
     {
-        if (reloading)
+        if (reloading && allowed)
             return;
 
         reloading = true;

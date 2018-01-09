@@ -38,7 +38,7 @@ public class GestureManager : MonoBehaviour
 
         //___________Action________________
         recognizer = new UnityEngine.XR.WSA.Input.GestureRecognizer();
-        StartCapturingAirTap();
+        //StartCapturingAirTap();
         recognizer.TappedEvent += TappedEvent;
 
         //Manipulation
@@ -103,12 +103,14 @@ public class GestureManager : MonoBehaviour
     private void TappedEvent(InteractionSourceKind source, int tapCount, Ray ray)
     {
         RaycastHit hit;
-        if(Physics.Raycast(ray, out hit,7,airTapLayer))
+        if (Physics.Raycast(ray, out hit, 20, airTapLayer))
         {
             hit.transform.SendMessage("OnAirTap");
         }
         else
+        {
             onAirTap.Invoke();
+        }
     }
 
     private void ManipulationStartedEvent(InteractionSourceKind source, Vector3 position, Ray ray)

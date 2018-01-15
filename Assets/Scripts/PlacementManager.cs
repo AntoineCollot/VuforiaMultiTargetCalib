@@ -8,7 +8,7 @@ public class PlacementManager : MonoBehaviour {
     Anchor target;
 
     [SerializeField]
-    PointOffset[] points;
+    Anchor[] points;
 
     [SerializeField]
     float minPointDistance = 0.2f;
@@ -20,16 +20,21 @@ public class PlacementManager : MonoBehaviour {
     [HideInInspector]
     public bool hologramIsPlaced = false;
 
+    [Header("Audio")]
+
+    new AudioSource audio;
+
     public static PlacementManager Instance;
 
 	// Use this for initialization
 	void Start () {
         Instance = this;
-	}
+        audio=GetComponent<AudioSource>();
+    }
 	
     public void ShowPoints(bool value)
     {
-        foreach (PointOffset p in points)
+        foreach (Anchor p in points)
         {
             p.gameObject.SetActive(value);
         }
@@ -51,8 +56,6 @@ public class PlacementManager : MonoBehaviour {
                 print("Points too close");
                 return;
             }
-
-
         }
 
         currentPointId++;
@@ -62,10 +65,10 @@ public class PlacementManager : MonoBehaviour {
             return;
         }
 
-        points[currentPointId].transform.SetPositionAndRotation(position, rotation);
+        points[currentPointId].PlaceAt(position, rotation);
         points[currentPointId].gameObject.SetActive(true);
 
-        if(currentPointId == 2)
+        if(currentPointId == 1)
         {
             SetTargetPosition();
         }
@@ -77,15 +80,15 @@ public class PlacementManager : MonoBehaviour {
         ShowPoints(false);
         GestureManager.Instance.StartCapturingAirTap();
         target.gameObject.SetActive(true);
+        audio.Play();
 
         UpdateTargetPosition();
     }
 
     public void UpdateTargetPosition()
     {
-        Vector3 directionPoint = (points[1].Position + points[2].Position) * 0.5f;
-        Vector3 direction = directionPoint - points[0].Position;
+        Vector3 direction = points[1].transform.position - points[0].transform.position;
 
-        target.PlaceAt(points[0].Position, points[0].Position + direction);
+        target.PlaceAt(points[0].transform.position, points[0].transform.position + direction);
     }
 }

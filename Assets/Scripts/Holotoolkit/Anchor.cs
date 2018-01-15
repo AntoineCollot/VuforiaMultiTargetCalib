@@ -40,6 +40,13 @@ public class Anchor : MonoBehaviour
         StopPlacing();
     }
 
+    public void PlaceAt(Vector3 position, Quaternion rotation)
+    {
+        StartPlacing();
+
+        transform.SetPositionAndRotation(position, rotation);
+        StopPlacing();
+    }
 
     public void PlaceAt(Vector3 position, Vector3 lookAt)
     {

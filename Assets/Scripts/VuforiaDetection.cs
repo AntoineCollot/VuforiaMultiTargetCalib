@@ -28,7 +28,7 @@ public class VuforiaDetection : MonoBehaviour
             return;
 
         activated = true;
-        StartCoroutine(FindStablePosition(1));
+        StartCoroutine(FindStablePosition(1.5f));
 
         //CalibScreen.Instance.TrackingFound();
     }
@@ -94,7 +94,7 @@ public class VuforiaDetection : MonoBehaviour
 
                     //CalibScreen.Instance.StabilizationSuccesful();
 
-                    ApplyPosition(refPosition);
+                    ApplyPosition(transform.position);
                     yield break;
                 }
             }

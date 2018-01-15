@@ -5,26 +5,21 @@ using UnityEngine.SceneManagement;
 
 public class Reload : MonoBehaviour {
 
-    bool allowed = false;
-    bool reloading = false;
+    float reloadTimer = 5;
 
-    private void Start()
+    [ContextMenu("Reload")]
+    public void ReloadApp()
     {
-        Invoke("AllowReload", 3);
-    }
-
-    void AllowReload()
-    {
-        allowed = true;
-    }
-
-	public void ReloadApp()
-    {
-        if (reloading && allowed)
+        if (reloadTimer > 0)
             return;
 
-        reloading = true;
+        Debug.Log("ReloadScene");
+        reloadTimer = 5;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    private void Update()
+    {
+        reloadTimer -= Time.deltaTime;
     }
 }

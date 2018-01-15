@@ -8,10 +8,21 @@ public class ConsoleText : MonoBehaviour {
     List<string> logs = new List<string>();
     int logCount;
 
+    public static ConsoleText Instance;
+
 	// Use this for initialization
 	void Awake () {
-        GameObject.DontDestroyOnLoad(transform.parent.gameObject);
+        if (Instance != null)
+        {
+            Destroy(transform.parent.gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
 
+        GameObject.DontDestroyOnLoad(transform.parent.gameObject);
+        
         text = GetComponent<Text>();
         Application.logMessageReceived += HandleLog;
     }
